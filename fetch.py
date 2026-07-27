@@ -17,12 +17,12 @@ def fetch_papers():
 
   # Объединяем концепты через знак |
   concepts_ids = "|".join(CONCEPTS)
-  url = "https://api.openalex.org/works"
+  url = "https://openalex.org"
 
   # Фильтрация по концептам и дате публикации начиная с last_month
   params = {
       "filter": f"concepts.id:{concepts_ids},from_publication_date:{last_month}",
-      "per_page": 20,  ,  # Увеличено до 20, так как за месяц может быть больше статей
+      "per_page": 20,  # Увеличено до 20, так как за месяц может быть больше статей
       "sort": "publication_date:desc",
   }
   headers = {"User-Agent": "mailto:nanonauka@gmail.com"}
