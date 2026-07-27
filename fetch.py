@@ -14,9 +14,11 @@ def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
     concepts_filter = " OR ".join([f"concepts.id:{c}" for c in CONCEPTS])
-    url = "https://api.openalex.org/works"
+    url = "https://openalex.org"
+
+    # Fixed the publication_date range filter format
     params = {
-        "filter": f"({concepts_filter}),publication_date:{yesterday} TO {today}",
+        "filter": f"({concepts_filter}),from_publication_date:{yesterday},to_publication_date:{today}",
         "per_page": 7,
         "sort": "relevance",
     }
