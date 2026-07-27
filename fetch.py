@@ -4,9 +4,7 @@ import os
 import requests
 
 CONCEPTS = [
-    "C27798704",  # Materials Science
-    "C301893433",  # Thin Films
-    "C129501741",  # Nanomaterials
+    "C15744",  # Materials Science
 ]
 
 DATA_FILE = "articles.json"
