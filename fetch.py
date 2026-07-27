@@ -13,14 +13,14 @@ def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
     
-    # Объединяем только ID концептов через "|"
+    # Объединяем концепты через "|"
     concepts_ids = "|".join(CONCEPTS)
     
-    url = "https://api.openalex.org/works"
+    url = "https://openalex.org"
     
-    # Все условия (концепты и диапазон дат) передаются строго через запятую внутри одного параметра "filter"
+    # Для фильтрации точных дат используем синтаксис публикации: publication_date:ДАТА1:ДАТА2
     params = {
-        "filter": f"concepts.id:{concepts_ids},from_publication_date:{yesterday},to_publication_date:{today}",
+        "filter": f"concepts.id:{concepts_ids},publication_date:{yesterday}:{today}",
         "per_page": 7,
         "sort": "relevance",
     }
