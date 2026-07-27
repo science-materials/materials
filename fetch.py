@@ -12,22 +12,24 @@ DATA_FILE = "articles.json"
 def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
-    concepts_filter = " OR ".join([f"concepts.id:{c}" for c in CONCEPTS])
-
-    # 1. Ensure this is exactly openalex.org/works
-    url = "https://openalex.org/works"
-
+    
+    # OpenAlex использует символ "|" для логического оператора OR в фильтрах
+    concepts_filter = "|".join([f"concepts.id:{c}" for c in CONCEPTS])
+    
+    # Исправленный эндпоинт API
+    url = "https://api.openalex.org/works"
+    
     params = {
         "filter": f"({concepts_filter}),from_publication_date:{yesterday},to_publication_date:{today}",
         "per_page": 7,
         "sort": "relevance",
     }
-
-    # 2. Add headers to identify yourself and enter the polite pool
+    
+    # Почта добавлена в User-Agent для вежливого пула (Polite Pool)
     headers = {
-        "User-Agent": "mailto:your-email@example.com"  # Change to your actual email
+        "User-Agent": "mailto:nanonauka@gmail.com"
     }
-
+    
     r = requests.get(url, params=params, headers=headers, timeout=30)
     r.raise_for_status()
     return r.json()["results"]
@@ -37,18 +39,18 @@ def format_paper(paper):
     abstract = (paper.get("abstract") or "")[:350]
     if len(paper.get("abstract", "")) > 350:
         abstract += "…"
-
+        
     journal = "Unknown journal"
     sources = paper.get("primary_location") or {}
     if sources and isinstance(sources, dict):
         source_details = sources.get("source") or {}
         journal = source_details.get("display_name", "Unknown journal")
-
+        
     doi = paper.get("doi")
     oa_url = paper.get("open_access", {}).get("oa_url")
     url_link = oa_url or (f"https://doi.org/{doi}" if doi else "")
     date_str = paper.get("publication_date", "")
-
+    
     return {
         "title": title,
         "abstract": abstract,
