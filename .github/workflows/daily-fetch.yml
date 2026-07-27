@@ -34,3 +34,11 @@ jobs:
             git commit -m "Update daily science feed"
             git push
           fi
+ 
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add articles.json
+          git commit -m "Update articles.json" || echo "No changes to commit"
+          git push
