@@ -2,7 +2,7 @@ name: Daily Science Feed Update
 
 on:
   schedule:
-    - cron: "45 9 * * *"  # 08:00 UTC. Для Москвы это 11:00.
+    - cron: "22 12 * * *"  # 08:00 UTC. Для Москвы это 11:00.
   workflow_dispatch:   # можно запустить вручную кнопкой в Actions
 
 jobs:
