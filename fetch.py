@@ -13,19 +13,20 @@ def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
     
-    # OpenAlex использует символ "|" для логического оператора OR в фильтрах
+    # Объединяем концепты через логическое ИЛИ ("|")
     concepts_filter = "|".join([f"concepts.id:{c}" for c in CONCEPTS])
     
-    # Исправленный эндпоинт API
+    # Правильный эндпоинт API
     url = "https://api.openalex.org/works"
     
+    # Для фильтрации по конкретным дням используем publication_date:>=ДАТА_1,publication_date:<=ДАТА_2
     params = {
-        "filter": f"({concepts_filter}),from_publication_date:{yesterday},to_publication_date:{today}",
+        "filter": f"({concepts_filter}),publication_date:>={yesterday},publication_date:<={today}",
         "per_page": 7,
         "sort": "relevance",
     }
     
-    # Почта добавлена в User-Agent для вежливого пула (Polite Pool)
+    # Реальный email для Polite Pool
     headers = {
         "User-Agent": "mailto:nanonauka@gmail.com"
     }
@@ -48,7 +49,7 @@ def format_paper(paper):
         
     doi = paper.get("doi")
     oa_url = paper.get("open_access", {}).get("oa_url")
-    url_link = oa_url or (f"https://doi.org/{doi}" if doi else "")
+    url_link = oa_url or (f"https://doi.org{doi}" if doi else "")
     date_str = paper.get("publication_date", "")
     
     return {
