@@ -1,23 +1,26 @@
+ 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Новые материалы: подборки</title>
+  <title>Science Feed: New Materials & Films</title>
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #f5f7fa; color: #1a1a1a; padding: 1rem; }
     h1 { margin-top: 0; font-size: 1.5rem; }
-    .card { background: white; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-    .card h2 { margin: 0 0 0.5rem 0; font-size: 1.15rem; }
-    .journal { color: #555; font-weight: 500; margin: 0.2rem 0 0.5rem 0; }
-    .abstract { color: #333; line-height: 1.5; margin: 0 0 1rem 0; }
+    .card { background: white; border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .title-en { color: #0055aa; font-weight: 600; margin: 0 0 0.3rem 0; }
+    .title-ru { color: #333; font-weight: 400; margin: 0.2rem 0 0.6rem 0; font-size: 0.95rem; }
+    .meta { color: #555; font-size: 0.85rem; margin: 0.2rem 0 0.5rem 0; }
+    .abstract-en { color: #222; line-height: 1.45; margin: 0.4rem 0 0.7rem 0; border-top: 1px solid #eee; padding-top: 0.4rem; }
+    .abstract-ru { color: #444; line-height: 1.4; margin: 0.4rem 0 0.7rem 0; border-top: 1px dashed #ccc; padding-top: 0.4rem; font-size: 0.92rem; }
     a { color: #0066cc; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .date { font-size: 0.85rem; color: #888; margin-top: 0.75rem; }
+    .date { font-size: 0.8rem; color: #888; margin-top: 0.6rem; }
   </style>
 </head>
 <body>
-  <h1>🧪 Новые материалы: ежедневные статьи</h1>
+  <h1>🧪 Science Feed: Materials, Films, Nanotech</h1>
   <div id="feed"></div>
 
   <script>
@@ -29,21 +32,22 @@
 
         const container = document.getElementById("feed");
         if (articles.length === 0) {
-          container.innerHTML = "<p>Сегодня новых статей не найдено.</p>";
+          container.innerHTML = "<p>No new articles today.</p>";
           return;
         }
 
         container.innerHTML = articles.map(a => `
           <article class="card">
-            <h2>${escapeHtml(a.title)}</h2>
-            <div class="journal">🏢 ${escapeHtml(a.journal)}</div>
-            <div class="abstract">📝 ${escapeHtml(a.abstract)}</div>
-            <a href="${escapeHtml(a.url)}" target="_blank" rel="noopener noreferrer">🔗 Ссылка на статью</a>
-            ${a.date ? `<div class="date">Дата публикации: ${a.date}</div>` : ""}
+            <div class="title-en">${escapeHtml(a.title_en)}</div>
+            ${a.title_ru ? `<div class="title-ru">🇷🇺 ${escapeHtml(a.title_ru)}</div>` : ""}
+            <div class="meta">🏢 ${escapeHtml(a.journal)} | 📅 ${escapeHtml(a.date)}</div>
+            <div class="abstract-en">📝 ${escapeHtml(a.abstract_en)}</div>
+            ${a.abstract_ru ? `<div class="abstract-ru">🇷🇺 ${escapeHtml(a.abstract_ru)}</div>` : ""}
+            <a href="${escapeHtml(a.url)}" target="_blank" rel="noopener noreferrer">🔗 Link to article</a>
           </article>
         `).join("");
       } catch (e) {
-        document.getElementById("feed").innerHTML = `<p style="color:red">Ошибка загрузки: ${e.message}</p>`;
+        document.getElementById("feed").innerHTML = `<p style="color:red">Error: ${e.message}</p>`;
       }
     }
 
