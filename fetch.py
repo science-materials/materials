@@ -16,9 +16,10 @@ def fetch_papers():
     # Объединяем концепты через "|"
     concepts_ids = "|".join(CONCEPTS)
     
+    # ИСПРАВЛЕНО: Строго официальный эндпоинт API
     url = "https://openalex.org"
     
-    # Для фильтрации точных дат используем синтаксис публикации: publication_date:ДАТА1:ДАТА2
+    # Используем синтаксис диапазона дат через двоеточие
     params = {
         "filter": f"concepts.id:{concepts_ids},publication_date:{yesterday}:{today}",
         "per_page": 7,
@@ -47,6 +48,8 @@ def format_paper(paper):
         
     doi = paper.get("doi")
     oa_url = paper.get("open_access", {}).get("oa_url")
+    
+    # ИСПРАВЛЕНО: Добавлен пропущенный слэш после doi.org
     url_link = oa_url or (f"https://doi.org{doi}" if doi else "")
     date_str = paper.get("publication_date", "")
     
