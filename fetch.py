@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import date
 import requests
 
 CONCEPTS = [
@@ -10,19 +10,19 @@ CONCEPTS = [
 DATA_FILE = "articles.json"
 
 def fetch_papers():
-    # Чтобы захватить статьи за вчера и сегодня, берем дату позавчерашнего дня
-    two_days_ago = (date.today() - timedelta(days=2)).isoformat()
+    # Получаем текущий год для фильтрации актуальных публикаций
+    current_year = date.today().year
     
     # Объединяем концепты через знак "|"
     concepts_ids = "|".join(CONCEPTS)
     
     url = "https://api.openalex.org/works"
     
-    # ИСПРАВЛЕНО: Единственный рабочий синтаксис точных дней для OpenAlex API
+    # Безопасная фильтрация по текущему году с сортировкой по самым свежим датам
     params = {
-        "filter": f"concepts.id:{concepts_ids},publication_date:>{two_days_ago}",
+        "filter": f"concepts.id:{concepts_ids},publication_year:{current_year}",
         "per_page": 7,
-        "sort": "relevance",
+        "sort": "publication_date:desc",
     }
     
     headers = {
