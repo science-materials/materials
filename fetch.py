@@ -9,23 +9,28 @@ CONCEPTS = [
 ]
 DATA_FILE = "articles.json"
 
-
 def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
     concepts_filter = " OR ".join([f"concepts.id:{c}" for c in CONCEPTS])
+
+    # 1. Ensure this is exactly api.openalex.org/works
     url = "https://openalex.org"
 
-    # Fixed the publication_date range filter format
     params = {
         "filter": f"({concepts_filter}),from_publication_date:{yesterday},to_publication_date:{today}",
         "per_page": 7,
         "sort": "relevance",
     }
-    r = requests.get(url, params=params, timeout=30)
+
+    # 2. Add headers to identify yourself and enter the polite pool
+    headers = {
+        "User-Agent": "mailto:your-email@example.com"  # Change to your actual email
+    }
+
+    r = requests.get(url, params=params, headers=headers, timeout=30)
     r.raise_for_status()
     return r.json()["results"]
-
 
 def format_paper(paper):
     title = paper.get("title", "No title")
@@ -52,13 +57,11 @@ def format_paper(paper):
         "date": date_str,
     }
 
-
 def save_articles(papers):
     formatted = [format_paper(p) for p in papers]
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(formatted, f, ensure_ascii=False, indent=2)
     print(f"Saved {len(formatted)} articles to {DATA_FILE}")
-
 
 if __name__ == "__main__":
     papers = fetch_papers()
