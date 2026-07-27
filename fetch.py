@@ -15,7 +15,7 @@ def fetch_papers():
     concepts_filter = " OR ".join([f"concepts.id:{c}" for c in CONCEPTS])
 
     # 1. Ensure this is exactly api.openalex.org/works
-    url = "https://openalex.org"
+    url = "https://api.openalex.org/works"
 
     params = {
         "filter": f"({concepts_filter}),from_publication_date:{yesterday},to_publication_date:{today}",
