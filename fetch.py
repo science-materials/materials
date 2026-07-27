@@ -1,87 +1,99 @@
 print("=== DEBUG: script started ===")
 
-import json
-import os
 import requests
+import json
+from datetime import date
 
-# Константы
-DATA_FILE = "articles.json"
-EMAIL = "nanonauka@gmail.com"
-
-def fetch_papers():
-    url = "https://openalex.org"
+def fetch_crossref_articles(query, years=(2023, 2024), limit=10):
+    """
+    query: поисковая фраза (например, "new materials")
+    years: кортеж (start_year, end_year)
+    limit: количество статей
+    """
+    print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
     
-    # Убрали фильтр по дате, берутся любые 10 статей
+    # Формируем диапазон дат для фильтра
+    start_date = f"{years[0]}-01-01"
+    end_date = f"{years[1]}-12-31"
+    
+    url = "https://api.crossref.org/works"
+    
+    # Параметры запроса
     params = {
-        "per_page": 10,
-        "sort": "relevance",
-        "mailto": EMAIL,  # Polite Pool
-    }
-    
-    headers = {
-        "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 (mailto:{EMAIL})"
+        "query": query,                 # Поисковая фраза
+        "filter": f"from-pub-date:{start_date},until-pub-date:{end_date}",
+        "sort": "published",            # Сортировка по дате публикации
+        "order": "desc",                # Сначала самые новые
+        "rows": limit                   # Количество результатов
     }
     
     try:
-        print("Fetching data from OpenAlex...")
-        r = requests.get(url, params=params, headers=headers, timeout=30)
-        r.raise_for_status()
-        return r.json().get("results", [])
-    except requests.exceptions.RequestException as e:
-        print(f"[WARNING] API request failed: {e}")
-        print("Returning empty list to prevent build failure.")
+        response = requests.get(url, params=params, timeout=15)
+        print(f"=== DEBUG: Status Code: {response.status_code} ===")
+        
+        if response.status_code != 200:
+            print(f"Error: API returned {response.status_code}")
+            return []
+            
+        data = response.json()
+        results = data.get("message", {}).get("items", [])
+        
+        clean_articles = []
+        
+        for item in results:
+            # Извлекаем авторов (часто это самый сложный блок в JSON)
+            authors = []
+            if "author" in item:
+                for author in item["author"]:
+                    name = f"{author.get('given', '')} {author.get('family', '')}".strip()
+                    if name:
+                        authors.append(name)
+            
+            # Получаем DOI и ссылку
+            doi = item.get("DOI", "No DOI")
+            link = f"https://doi.org/{doi}" if doi else ""
+            
+            # Название журнала
+            journal = ""
+            if "container-title" in item and len(item["container-title"]) > 0:
+                journal = item["container-title"][0]
+            
+            # Дата публикации (берем год)
+            year = ""
+            if "issued" in item and "date-parts" in item["issued"]:
+                date_parts = item["issued"]["date-parts"][0]
+                if len(date_parts) >= 1:
+                    year = str(date_parts[0])
+            
+            abstract = item.get("abstract", "No abstract available")
+            title = item.get("title", ["No Title"])[0] if isinstance(item.get("title"), list) else item.get("title", "No Title")
+
+            clean_article = {
+                "id": doi,
+                "title": title,
+                "authors": ", ".join(authors),
+                "abstract": abstract,
+                "journal": journal,
+                "year": year,
+                "link": link,
+                "source": "Crossref"
+            }
+            clean_articles.append(clean_article)
+            
+        print(f"=== DEBUG: Saved {len(clean_articles)} real articles. ===")
+        
+        with open("articles.json", "w", encoding="utf-8") as f:
+            json.dump(clean_articles, f, ensure_ascii=False, indent=2)
+            
+        return clean_articles
+
+    except Exception as e:
+        print(f"=== DEBUG: Error occurred: {e} ===")
         return []
 
-def format_paper(paper):
-    title = paper.get("title", "No title")
-    
-    # Безопасное извлечение аннотации
-    abstract = (paper.get("abstract") or "")[:350]
-    if len(paper.get("abstract") or "") > 350:
-        abstract += "…"
-        
-    journal = "Unknown journal"
-    sources = paper.get("primary_location") or {}
-    if sources and isinstance(sources, dict):
-        source_details = sources.get("source") or {}
-        journal = source_details.get("display_name", "Unknown journal")
-        
-    doi = paper.get("doi")
-    oa_url = paper.get("open_access", {}).get("oa_url")
-    
-    if doi and doi.startswith("http"):
-        doi_link = doi
-    else:
-        doi_link = f"https://doi.org{doi}" if doi else ""
-        
-    url_link = oa_url or doi_link
-    date_str = paper.get("publication_date", "")
-    
-    return {
-        "title": title,
-        "abstract": abstract,
-        "journal": journal,
-        "url": url_link,
-        "date": date_str,
-    }
-
-def save_articles(papers):
-    if not papers:
-        if os.path.exists(DATA_FILE):
-            print(f"Keeping existing {DATA_FILE} unmodified due to API failure.")
-        else:
-            with open(DATA_FILE, "w", encoding="utf-8") as f:
-                json.dump([], f)
-            print(f"Created empty {DATA_FILE} to satisfy workflow conditions.")
-        return
-        
-    formatted = [format_paper(p) for p in papers]
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(formatted, f, ensure_ascii=False, indent=2)
-    print(f"Saved {len(formatted)} articles to {DATA_FILE}")
-
 if __name__ == "__main__":
-    papers = fetch_papers()
-    save_articles(papers)
+    # ТВОЯ НАСТРОЙКА: Меняй фразу здесь
+    search_query = "new materials" 
+    fetch_crossref_articles(search_query, years=(2023, 2024), limit=10)
     
 print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
