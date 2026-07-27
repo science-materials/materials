@@ -95,5 +95,7 @@ if __name__ == "__main__":
     # ТВОЯ НАСТРОЙКА: Меняй фразу здесь
     search_query = "new materials" 
     fetch_crossref_articles(search_query, years=(2023, 2024), limit=10)
+        
+    papers = fetch_crossref_articles(search_query, years=(2023, 2024), limit=10)
     
-print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
+    print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
