@@ -84,4 +84,4 @@ if __name__ == "__main__":
     papers = fetch_papers()
     save_articles(papers)
     
-print(f"=== DEBUG: Scripta finished. Saved {len(results)} articles ===")
+print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
