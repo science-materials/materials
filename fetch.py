@@ -4,10 +4,10 @@ import requests
 import json
 from datetime import date
 
-def fetch_crossref_articles(query, years=(2023, 2024), limit=10):
+def fetch_crossref_articles(query, years=(2025), limit=10):
     """
-    query: поисковая фраза (например, "new materials")
-    years: кортеж (start_year, end_year)
+    query: поисковая фраза (например, "new materials research films")
+    years: кортеж (start_year, end_year) — теперь по умолчанию 2025
     limit: количество статей
     """
     print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
@@ -93,9 +93,8 @@ def fetch_crossref_articles(query, years=(2023, 2024), limit=10):
 
 if __name__ == "__main__":
     # ТВОЯ НАСТРОЙКА: Меняй фразу здесь
-    search_query = "new materials" 
-    fetch_crossref_articles(search_query, years=(2023, 2024), limit=10)
-        
-    papers = fetch_crossref_articles(search_query, years=(2023, 2024), limit=10)
+    search_query = "new materials research films"
+    
+    papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=10)
     
     print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
