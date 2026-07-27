@@ -1,3 +1,5 @@
+print("=== DEBUG: script started ===")
+
 import json
 import os
 import requests
@@ -81,3 +83,5 @@ def save_articles(papers):
 if __name__ == "__main__":
     papers = fetch_papers()
     save_articles(papers)
+    
+print(f"=== DEBUG: Scripta finished. Saved {len(reslts)} articles ===")
