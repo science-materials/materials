@@ -10,18 +10,17 @@ CONCEPTS = [
 DATA_FILE = "articles.json"
 
 def fetch_papers():
-    today = date.today().isoformat()
-    yesterday = (date.today() - timedelta(days=1)).isoformat()
+    # Чтобы захватить статьи за вчера и сегодня, берем дату позавчерашнего дня
+    two_days_ago = (date.today() - timedelta(days=2)).isoformat()
     
-    # Объединяем концепты через "|"
+    # Объединяем концепты через знак "|"
     concepts_ids = "|".join(CONCEPTS)
     
-    # ИСПРАВЛЕНО: Строго официальный эндпоинт API
     url = "https://api.openalex.org/works"
     
-    # Используем синтаксис диапазона дат через двоеточие
+    # ИСПРАВЛЕНО: Единственный рабочий синтаксис точных дней для OpenAlex API
     params = {
-        "filter": f"concepts.id:{concepts_ids},publication_date:{yesterday}:{today}",
+        "filter": f"concepts.id:{concepts_ids},publication_date:>{two_days_ago}",
         "per_page": 7,
         "sort": "relevance",
     }
@@ -48,8 +47,6 @@ def format_paper(paper):
         
     doi = paper.get("doi")
     oa_url = paper.get("open_access", {}).get("oa_url")
-    
-    # ИСПРАВЛЕНО: Добавлен пропущенный слэш после doi.org
     url_link = oa_url or (f"https://doi.org{doi}" if doi else "")
     date_str = paper.get("publication_date", "")
     
