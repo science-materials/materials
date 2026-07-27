@@ -17,7 +17,7 @@ def fetch_papers():
     concepts_ids = "|".join(CONCEPTS)
     
     # ИСПРАВЛЕНО: Строго официальный эндпоинт API
-    url = "https://openalex.org/works"
+    url = "https://api.openalex.org/works"
     
     # Используем синтаксис диапазона дат через двоеточие
     params = {
