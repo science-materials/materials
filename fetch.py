@@ -13,20 +13,21 @@ def fetch_papers():
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
     
-    # Объединяем концепты через логическое ИЛИ ("|")
+    # Объединяем концепты через "|"
     concepts_filter = "|".join([f"concepts.id:{c}" for c in CONCEPTS])
     
-    # Правильный эндпоинт API
     url = "https://api.openalex.org/works"
     
-    # Для фильтрации по конкретным дням используем publication_date:>=ДАТА_1,publication_date:<=ДАТА_2
+    # ВАЖНО: from_publication_date и to_publication_date вынесены из строки filter
+    # Они работают как самостоятельные параметры запроса в OpenAlex
     params = {
-        "filter": f"({concepts_filter}),publication_date:>={yesterday},publication_date:<={today}",
+        "filter": f"concepts.id:{concepts_filter}",
+        "from_publication_date": yesterday,
+        "to_publication_date": today,
         "per_page": 7,
         "sort": "relevance",
     }
     
-    # Реальный email для Polite Pool
     headers = {
         "User-Agent": "mailto:nanonauka@gmail.com"
     }
