@@ -24,19 +24,19 @@
     "keywords": []
   },
   {
-    "title": "Obtaining and Characterizing New Advanced Materials",
-    "authors": "Andrei Victor Sandu",
-    "doi": "10.3390/ma16051881",
-    "year": 2023,
-    "abstract": "<jats:p>This editorial highlights the results presented in the second Special Issue dedicated to obtaining and characterizing new materials, wherein one review paper and 13 research articles have been published. The most important field covered is that of materials involved in civil engineering, focusing on geopolymers and insulating materials alongside developing new methods for enhancing the characteristics of different systems. Another important field is that of the materials used for environmental issues, and finally, those involved in human health.</jats:p>",
-    "keywords": []
-  },
-  {
     "title": "Advanced Materials and Technologies: Functional Materials, Additive Manufacture and Materials for Energy Storage Devices",
     "authors": "Takashige Omatsu, Nicuşor Alin Sîrbu, Nguyen Quang Liem",
     "doi": "10.4028/b-zi1ebv",
     "year": 2024,
     "abstract": "",
+    "keywords": []
+  },
+  {
+    "title": "Obtaining and Characterizing New Advanced Materials",
+    "authors": "Andrei Victor Sandu",
+    "doi": "10.3390/ma16051881",
+    "year": 2023,
+    "abstract": "<jats:p>This editorial highlights the results presented in the second Special Issue dedicated to obtaining and characterizing new materials, wherein one review paper and 13 research articles have been published. The most important field covered is that of materials involved in civil engineering, focusing on geopolymers and insulating materials alongside developing new methods for enhancing the characteristics of different systems. Another important field is that of the materials used for environmental issues, and finally, those involved in human health.</jats:p>",
     "keywords": []
   },
   {
@@ -96,22 +96,6 @@
     "keywords": []
   },
   {
-    "title": "Artificial Intelligence and Advanced Materials",
-    "authors": "Cefe López",
-    "doi": "10.1002/adma.202208683",
-    "year": 2023,
-    "abstract": "<jats:title>Abstract</jats:title><jats:p>Artificial intelligence (AI) is gaining strength, and materials science can both contribute to and profit from it. In a simultaneous progress race, new materials, systems, and processes can be devised and optimized thanks to machine learning (ML) techniques, and such progress can be turned into innovative computing platforms. Future materials scientists will profit from understanding how ML can boost the conception of advanced materials. This review covers aspects of computation from the fundamentals to directions taken and repercussions produced by computation to account for the origins, procedures, and applications of AI. ML and its methods are reviewed to provide basic knowledge of its implementation and its potential. The materials and systems used to implement AI with electric charges are finding serious competition from other information‐carrying and processing agents. The impact these techniques have on the inception of new advanced materials is so deep that a new paradigm is developing where implicit knowledge is being mined to conceive materials and systems for functions instead of finding applications to found materials. How far this trend can be carried is hard to fathom, as exemplified by the power to discover unheard of materials or physical laws buried in data.</jats:p>",
-    "keywords": []
-  },
-  {
-    "title": "Materials Nanoarchitectonics for Advanced Devices",
-    "authors": "Katsuhiko Ariga",
-    "doi": "10.3390/ma17235918",
-    "year": 2024,
-    "abstract": "<jats:p>Advances in nanotechnology have made it possible to observe and evaluate structures down to the atomic and molecular level. The next step in the development of functional materials is to apply the knowledge of nanotechnology to materials sciences. This is the role of nanoarchitectonics, which is a concept of post-nanotechnology. Nanoarchitectonics is defined as a methodology to create functional materials using nanounits such as atoms, molecules, and nanomaterials as building blocks. Nanoarchitectonics is very general and is not limited to materials or applications, and thus nanoarchitecture is applied in many fields. In particular, in the evolution from nanotechnology to nanoarchitecture, it is useful to consider the contribution of nanoarchitecture in device applications. There may be a solution to the widely recognized problem of integrating top-down and bottom-up approaches in the design of functional systems. With this in mind, this review discusses examples of nanoarchitectonics in developments of advanced devices. Some recent examples are introduced through broadly dividing them into organic molecular nanoarchitectonics and inorganic materials nanoarchitectonics. Examples of organic molecular nanoarchitecture include a variety of control structural elements, such as π-conjugated structures, chemical structures of complex ligands, steric hindrance effects, molecular stacking, isomerization and color changes due to external stimuli, selective control of redox reactions, and doping control of organic semiconductors by electron transfer reactions. Supramolecular chemical processes such as association and intercalation of organic molecules are also important in controlling device properties. The nanoarchitectonics of inorganic materials often allows for control of size, dimension, and shape, and their associated physical properties can also be controlled. In addition, there are specific groups of materials that are suitable for practical use, such as nanoparticles and graphene. Therefore, nanoarchitecture of inorganic materials also has a more practical aspect. Based on these aspects, this review finally considers the future of materials nanoarchitectonics for further advanced devices.</jats:p>",
-    "keywords": []
-  },
-  {
     "title": "Advanced Materials for Clothing and Textile Engineering",
     "authors": "Snježana Firšt Rogale, Dubravko Rogale",
     "doi": "10.3390/ma16093407",
@@ -124,6 +108,14 @@
     "authors": "Edward Bormashenko",
     "doi": "10.1201/9781003178477-9",
     "year": 2024,
+    "abstract": "",
+    "keywords": []
+  },
+  {
+    "title": "Functional materials for sustainable technologies",
+    "authors": "Guohua Jia, Liangzhi Kou",
+    "doi": "10.1016/j.mtchem.2023.101782",
+    "year": 2023,
     "abstract": "",
     "keywords": []
   },
@@ -141,6 +133,22 @@
     "doi": "10.3390/ma17020462",
     "year": 2024,
     "abstract": "<jats:p>The rapid advances in technologies around the globe necessitate the development of new materials, nanostructures, and multicomponent composites with specific chemical and physical properties that can meet the requirements of modern technologies [...]</jats:p>",
+    "keywords": []
+  },
+  {
+    "title": "Materials Nanoarchitectonics for Advanced Devices",
+    "authors": "Katsuhiko Ariga",
+    "doi": "10.3390/ma17235918",
+    "year": 2024,
+    "abstract": "<jats:p>Advances in nanotechnology have made it possible to observe and evaluate structures down to the atomic and molecular level. The next step in the development of functional materials is to apply the knowledge of nanotechnology to materials sciences. This is the role of nanoarchitectonics, which is a concept of post-nanotechnology. Nanoarchitectonics is defined as a methodology to create functional materials using nanounits such as atoms, molecules, and nanomaterials as building blocks. Nanoarchitectonics is very general and is not limited to materials or applications, and thus nanoarchitecture is applied in many fields. In particular, in the evolution from nanotechnology to nanoarchitecture, it is useful to consider the contribution of nanoarchitecture in device applications. There may be a solution to the widely recognized problem of integrating top-down and bottom-up approaches in the design of functional systems. With this in mind, this review discusses examples of nanoarchitectonics in developments of advanced devices. Some recent examples are introduced through broadly dividing them into organic molecular nanoarchitectonics and inorganic materials nanoarchitectonics. Examples of organic molecular nanoarchitecture include a variety of control structural elements, such as π-conjugated structures, chemical structures of complex ligands, steric hindrance effects, molecular stacking, isomerization and color changes due to external stimuli, selective control of redox reactions, and doping control of organic semiconductors by electron transfer reactions. Supramolecular chemical processes such as association and intercalation of organic molecules are also important in controlling device properties. The nanoarchitectonics of inorganic materials often allows for control of size, dimension, and shape, and their associated physical properties can also be controlled. In addition, there are specific groups of materials that are suitable for practical use, such as nanoparticles and graphene. Therefore, nanoarchitecture of inorganic materials also has a more practical aspect. Based on these aspects, this review finally considers the future of materials nanoarchitectonics for further advanced devices.</jats:p>",
+    "keywords": []
+  },
+  {
+    "title": "Artificial Intelligence and Advanced Materials",
+    "authors": "Cefe López",
+    "doi": "10.1002/adma.202208683",
+    "year": 2023,
+    "abstract": "<jats:title>Abstract</jats:title><jats:p>Artificial intelligence (AI) is gaining strength, and materials science can both contribute to and profit from it. In a simultaneous progress race, new materials, systems, and processes can be devised and optimized thanks to machine learning (ML) techniques, and such progress can be turned into innovative computing platforms. Future materials scientists will profit from understanding how ML can boost the conception of advanced materials. This review covers aspects of computation from the fundamentals to directions taken and repercussions produced by computation to account for the origins, procedures, and applications of AI. ML and its methods are reviewed to provide basic knowledge of its implementation and its potential. The materials and systems used to implement AI with electric charges are finding serious competition from other information‐carrying and processing agents. The impact these techniques have on the inception of new advanced materials is so deep that a new paradigm is developing where implicit knowledge is being mined to conceive materials and systems for functions instead of finding applications to found materials. How far this trend can be carried is hard to fathom, as exemplified by the power to discover unheard of materials or physical laws buried in data.</jats:p>",
     "keywords": []
   }
 ]
