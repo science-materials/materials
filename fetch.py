@@ -46,7 +46,7 @@ def fetch_articles():
         "query": SEARCH_QUERY,
         "filter": "type-name:journal-article,has-affiliation:true",
         "rows": MAX_ITEMS,
-        "mailto": "your_email@example.com"
+        "mailto": "nanonauka@gmail.com"
     }
 
     try:
