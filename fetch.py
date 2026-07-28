@@ -18,7 +18,7 @@ def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search
             return True
     return False
 
-def fetch_crossref_articles(query: str, years: tuple = (2023, 2024), limit: int = 100):
+def fetch_crossref_articles(query: str, years: tuple = (2025, 2025), limit: int = 100):
     print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
 
     url = "https://api.crossref.org/works"
@@ -115,5 +115,5 @@ def fetch_crossref_articles(query: str, years: tuple = (2023, 2024), limit: int 
 if __name__ == "__main__":
     print("=== DEBUG: script started ===")
     search_query = "materials"  # более широкое слово, чем "new materials"
-    papers = fetch_crossref_articles(search_query, years=(2023, 2024), limit=100)
+    papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=100)
     print(f"=== DEBUG: Script finished. Saved {len(papers)} articles ===")
