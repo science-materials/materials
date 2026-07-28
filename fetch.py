@@ -20,7 +20,7 @@ def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search
             return True
     return False
 
-def fetch_crossref_articles(query: str, years: tuple = (2025, 2025), limit: int = 10):
+def fetch_crossref_articles(query: str, years: tuple = (2024, 2024), limit: int = 10):
     """Основная функция для запроса статей из Crossref."""
     print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
     
