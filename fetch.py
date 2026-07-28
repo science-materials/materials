@@ -84,7 +84,7 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
         print(f"=== DEBUG: Saved {len(clean_articles)} real articles. ===")
 
         data_dir = "_data"
-        if not os.path.exist(data_dir):
+        if not os.path.exists(data_dir):
             os.makedirs(data_dir)
             print(f"=== DEBUG: Created directory '(data_dir)' ===")
 
