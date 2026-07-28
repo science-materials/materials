@@ -1,34 +1,16 @@
-print("=== DEBUG: script started ===")
-
 import os
 import requests
 import json
-from datetime import date
 
-def fetch_crossref_articles(query, years=(2025), limit=10):
-    """
-    query: поисковая фраза (например, "new materials research films")
-    years: кортеж (start_year, end_year) — теперь по умолчанию 2025
-    limit: количество статей
-    """
-    print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
-    
-    # Формируем диапазон дат для фильтра
-    start_date = f"{years[0]}-01-01"
-    end_date = f"{years[1]}-12-31"
-    
-    url = "https://api.crossref.org/works"
-    
-    # Параметры запроса
-
-BLACKLIST_WORDS = {"negro", "colonial", "vocabulary", "history", "culture", "art", "literature"}
-
-def is_not_blacklisted(title: str) -> bool:
-    t = title.lower()
+def is_not_blacklisted(title_str: str) -> bool:
+    """Проверяет, нет ли в названии слов из черного списка."""
+    BLACKLIST_WORDS = {'negro', 'colonial', 'vocabulary', 'history', 'culture', 'art', 'literature'}
+    t = title_str.lower()
     return not any(word in t for word in BLACKLIST_WORDS)
 
-def is_relevant_by_content(title: str, abstract: str, subjects: list, search_terms: list) -> bool:
-    t = title.lower()
+def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search_terms: list) -> bool:
+    """Проверяет наличие поисковых термов в названии, аннотации или темах."""
+    t = title_str.lower()
     a = abstract.lower() if abstract else ""
     s = " ".join([sub.lower() for sub in subjects])
     
@@ -38,19 +20,25 @@ def is_relevant_by_content(title: str, abstract: str, subjects: list, search_ter
             return True
     return False
 
-def fetch_articles():
-    print(f"=== Starting fetch for: '{SEARCH_QUERY}' ===")
+def fetch_crossref_articles(query: str, years: tuple = (2025, 2025), limit: int = 10):
+    """Основная функция для запроса статей из Crossref."""
+    print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
     
-    # ВАЖНО: query (а не query.title) — поиск по всем полям
+    url = "https://api.crossref.org/works"
+    
+    # Формируем фильтр по датам и типу документа
+    start_year, end_year = years
+    filter_str = f"type-name:journal-article,has-affiliation:true,from-pub-date:{start_year}-01-01,until-pub-date:{end_year}-12-31"
+    
     params = {
-        "query": SEARCH_QUERY,
-        "filter": "type-name:journal-article,has-affiliation:true",
-        "rows": MAX_ITEMS,
+        "query": query,
+        "filter": filter_str,
+        "rows": limit,  # Количество запрашиваемых строк
         "mailto": "nanonauka@gmail.com"
     }
-
+    
     try:
-        response = requests.get(CROSSREF_URL, params=params)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
     except requests.exceptions.RequestException as e:
@@ -58,66 +46,64 @@ def fetch_articles():
         return []
 
     items = data.get("message", {}).get("items", [])
-    search_terms = SEARCH_QUERY.split()
-    
+    search_terms = query.replace("OR", "").replace("AND", "").split()
     print(f"=== Raw hits before filtering: {len(items)} ===")
     
     clean_articles = []
+    
     for item in items:
-        title = item.get("title", ["No title"])
+        # Crossref возвращает title как список, берем первый элемент
+        titles_list = item.get("title", [])
+        title = titles_list[0] if titles_list else "No title"
+        
         abstract = item.get("abstract", "")
         subjects = item.get("subject", [])
         
-        # Фильтр 1: чёрный список (убираем гуманитарный мусор)
+        # Фильтр 1: чёрный список
         if not is_not_blacklisted(title):
             print(f"⛔ Skipped (blacklist): {title}")
             continue
-        
-        # Фильтр 2: проверка по содержанию (название/аннотация/ключевые слова)
+            
+        # Фильтр 2: проверка по содержанию
         if not is_relevant_by_content(title, abstract, subjects, search_terms):
             print(f"⛔ Skipped (no match in content): {title}")
             continue
-        
-        # Дальше обычная обработка
+            
+        # Сбор авторов
         authors_list = item.get("author", [])
-        authors_names = [f"{a.get('given', '')} {a.get('family', '')}".strip()
-                         for a in authors_list if a.get('family')]
+        authors_names = [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in authors_list if a.get('family')]
         authors_str = ", ".join(authors_names)
-
+        
         doi = item.get("DOI", "")
-        issued = item.get("issued", {}).get("date-parts", [[None]])
-        year = issued if issued and isinstance(issued, int) else None
-
+        
+        # Получение года из структуры issued
+        date_parts = item.get("issued", {}).get("date-parts", [[None]])
+        year = date_parts[0][0] if date_parts and date_parts[0] else None
+        
         clean_articles.append({
             "title": title,
             "authors": authors_str,
             "doi": doi,
             "year": year,
-            "abstract": abstract,          # можно сохранить и в JSON, если нужно
-            "keywords": subjects           # и ключевые слова тоже
+            "abstract": abstract,
+            "keywords": subjects
         })
-
-        data_dir = "_data"
-        if not os.path.exists(data_dir):
-            os.makedirs(data_dir)
-            print(f"=== DEBUG: Created directory '(data_dir)' ===")
-
-        output_path = os.path.join(data_dir, "articles.json")
         
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(clean_articles, f, ensure_ascii=False, indent=2)
+    # Сохранение результатов
+    data_dir = "_data"
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+        print(f"=== DEBUG: Created directory ({data_dir}) ===")
         
-        print(f"=== Final articles after filtering: {len(clean_articles)} ===")
-        return clean_articles
-
-    except Exception as e:
-        print(f"=== DEBUG: Error occurred: {e} ===")
-        return []
+    output_path = os.path.join(data_dir, "articles.json")
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(clean_articles, f, ensure_ascii=False, indent=2)
+        
+    print(f"=== Final articles after filtering: {len(clean_articles)} ===")
+    return clean_articles
 
 if __name__ == "__main__":
-    # ТВОЯ НАСТРОЙКА: Меняй фразу здесь
+    print("=== DEBUG: script started ===")
     search_query = "new materials OR research OR films"
-    
-    papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=10)
-    
-    print(f"=== DEBUG: Scripta finished. Saved {len(papers)} articles ===")
+    papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=20)
+    print(f"=== DEBUG: Script finished. Saved {len(papers)} articles ===")
