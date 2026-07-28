@@ -93,7 +93,7 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
 
 if __name__ == "__main__":
     # ТВОЯ НАСТРОЙКА: Меняй фразу здесь
-    search_query = "new materials research films"
+    search_query = "new materials OR research OR films"
     
     papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=10)
     
