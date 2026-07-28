@@ -1,5 +1,6 @@
 print("=== DEBUG: script started ===")
 
+import os
 import requests
 import json
 from datetime import date
