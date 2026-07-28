@@ -82,7 +82,7 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
             
         print(f"=== DEBUG: Saved {len(clean_articles)} real articles. ===")
         
-        with open("articles.json", "w", encoding="utf-8") as f:
+        with open("_data/articles.json", "w", encoding="utf-8") as f:
             json.dump(clean_articles, f, ensure_ascii=False, indent=2)
             
         return clean_articles
