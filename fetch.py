@@ -104,6 +104,6 @@ def fetch_crossref_articles(query: str, years: tuple = (2025, 2025), limit: int 
 
 if __name__ == "__main__":
     print("=== DEBUG: script started ===")
-    search_query = "new materials OR research OR films"
+    search_query = "new materials"
     papers = fetch_crossref_articles(search_query, years=(2025, 2025), limit=20)
     print(f"=== DEBUG: Script finished. Saved {len(papers)} articles ===")
