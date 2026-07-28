@@ -1,12 +1,13 @@
-import os
+ort os
 import requests
 import json
 
 def is_not_blacklisted(title_str: str) -> bool:
-    """Проверяет, нет ли в названии слов из черного списка."""
-    # BLACKLIST_WORDS = {'negro', 'colonial', 'vocabulary', 'history', 'culture', 'art', 'literature'}
+    """Проверяет, нет ли в названии слов из чёрного списка."""
+    # Оставляем только явно нежелательные слова
+    BLACKLIST_WORDS = {'negro', 'colonial'}
     t = title_str.lower()
-    return True 
+    return not any(word in t for word in BLACKLIST_WORDS)
 
 def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search_terms: list) -> bool:
     """Проверяет наличие поисковых термов в названии, аннотации или темах."""
@@ -20,20 +21,20 @@ def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search
             return True
     return False
 
-def fetch_crossref_articles(query: str, years: tuple = (2024, 2024), limit: int = 10):
+def fetch_crossref_articles(query: str, years: tuple = (2023, 2024), limit: int = 50):
     """Основная функция для запроса статей из Crossref."""
     print(f"=== DEBUG: Starting Crossref fetch for '{query}' ===")
     
     url = "https://api.crossref.org/works"
-    
-    # Формируем фильтр по датам и типу документа
     start_year, end_year = years
-    filter_str = f"type-name:journal-article,has-affiliation:true,from-pub-date:{start_year}-01-01,until-pub-date:{end_year}-12-31"
+    
+    # ВАЖНО: убрали has-affiliation:true — он часто даёт 0 результатов
+    filter_str = f"type-name:journal-article,from-pub-date:{start_year}-01-01,until-pub-date:{end_year}-12-31"
     
     params = {
         "query": query,
         "filter": filter_str,
-        "rows": limit,  # Количество запрашиваемых строк
+        "rows": limit,
         "mailto": "nanonauka@gmail.com"
     }
     
@@ -46,37 +47,42 @@ def fetch_crossref_articles(query: str, years: tuple = (2024, 2024), limit: int 
         return []
 
     items = data.get("message", {}).get("items", [])
-    search_terms = query.replace("OR", "").replace("AND", "").split()
+    # Фиксированный список релевантных фраз вместо разбиения запроса
+    search_terms = [
+        "new materials",
+        "novel materials",
+        "advanced materials",
+        "emerging materials",
+        "functional materials",
+        "smart materials"
+    ]
     print(f"=== Raw hits before filtering: {len(items)} ===")
     
     clean_articles = []
     
     for item in items:
-        # Crossref возвращает title как список, берем первый элемент
         titles_list = item.get("title", [])
-        title = titles_list[0] if titles_list else "No title"
+        if not titles_list:
+            continue
+        title = titles_list[0]
         
         abstract = item.get("abstract", "")
         subjects = item.get("subject", [])
         
-        # Фильтр 1: чёрный список
         if not is_not_blacklisted(title):
             print(f"⛔ Skipped (blacklist): {title}")
             continue
             
-        # Фильтр 2: проверка по содержанию
         if not is_relevant_by_content(title, abstract, subjects, search_terms):
-            print(f"⛔ Skipped (no match in content): {title}")
+            # Не выводим каждую пропущенную статью, чтобы не засорять лог
             continue
             
-        # Сбор авторов
         authors_list = item.get("author", [])
         authors_names = [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in authors_list if a.get('family')]
         authors_str = ", ".join(authors_names)
         
         doi = item.get("DOI", "")
         
-        # Получение года из структуры issued
         date_parts = item.get("issued", {}).get("date-parts", [[None]])
         year = date_parts[0][0] if date_parts and date_parts[0] else None
         
@@ -89,7 +95,6 @@ def fetch_crossref_articles(query: str, years: tuple = (2024, 2024), limit: int 
             "keywords": subjects
         })
         
-    # Сохранение результатов
     data_dir = "_data"
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
@@ -105,5 +110,6 @@ def fetch_crossref_articles(query: str, years: tuple = (2024, 2024), limit: int 
 if __name__ == "__main__":
     print("=== DEBUG: script started ===")
     search_query = "new materials"
-    papers = fetch_crossref_articles(search_query, years=(2024, 2024), limit=20)
+    # Используем диапазон 2023–2024, чтобы точно были статьи
+    papers = fetch_crossref_articles(search_query, years=(2023, 2024), limit=50)
     print(f"=== DEBUG: Script finished. Saved {len(papers)} articles ===")
