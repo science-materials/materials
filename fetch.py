@@ -22,6 +22,7 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
     # Параметры запроса
     params = {
         "query": query,                 # Поисковая фраза
+        "filter": "type-name:journal-articles,has-affilation:true"
         "filter": f"from-pub-date:{start_date},until-pub-date:{end_date}",
         "sort": "published",            # Сортировка по дате публикации
         "order": "desc",                # Сначала самые новые
