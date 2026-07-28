@@ -81,8 +81,15 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
             clean_articles.append(clean_article)
             
         print(f"=== DEBUG: Saved {len(clean_articles)} real articles. ===")
+
+        data_dir = "_data"
+        if not os.path.exist(data_dir):
+            os.makedirs(data_dir)
+            print(f"=== DEBUG: Created directory '(data_dir)' ===")
+
+        output_path = os.path.join(data_dir, "articles.json")
         
-        with open("_data/articles.json", "w", encoding="utf-8") as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             json.dump(clean_articles, f, ensure_ascii=False, indent=2)
             
         return clean_articles
