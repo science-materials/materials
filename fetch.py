@@ -4,9 +4,9 @@ import json
 
 def is_not_blacklisted(title_str: str) -> bool:
     """Проверяет, нет ли в названии слов из черного списка."""
-    BLACKLIST_WORDS = {'negro', 'colonial', 'vocabulary', 'history', 'culture', 'art', 'literature'}
+    # BLACKLIST_WORDS = {'negro', 'colonial', 'vocabulary', 'history', 'culture', 'art', 'literature'}
     t = title_str.lower()
-    return not any(word in t for word in BLACKLIST_WORDS)
+      return True 
 
 def is_relevant_by_content(title_str: str, abstract: str, subjects: list, search_terms: list) -> bool:
     """Проверяет наличие поисковых термов в названии, аннотации или темах."""
