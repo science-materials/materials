@@ -20,69 +20,84 @@ def fetch_crossref_articles(query, years=(2025), limit=10):
     url = "https://api.crossref.org/works"
     
     # Параметры запроса
-    params = {
-        "query": query,                 # Поисковая фраза
-        "filter": "type-name:journal-articles,has-affilation:true"
-        "filter": f"from-pub-date:{start_date},until-pub-date:{end_date}",
-        "sort": "published",            # Сортировка по дате публикации
-        "order": "desc",                # Сначала самые новые
-        "rows": limit                   # Количество результатов
-    }
-    
-    try:
-        response = requests.get(url, params=params, timeout=15)
-        print(f"=== DEBUG: Status Code: {response.status_code} ===")
-        
-        if response.status_code != 200:
-            print(f"Error: API returned {response.status_code}")
-            return []
-            
-        data = response.json()
-        results = data.get("message", {}).get("items", [])
-        
-        clean_articles = []
-        
-        for item in results:
-            # Извлекаем авторов (часто это самый сложный блок в JSON)
-            authors = []
-            if "author" in item:
-                for author in item["author"]:
-                    name = f"{author.get('given', '')} {author.get('family', '')}".strip()
-                    if name:
-                        authors.append(name)
-            
-            # Получаем DOI и ссылку
-            doi = item.get("DOI", "No DOI")
-            link = f"https://doi.org/{doi}" if doi else ""
-            
-            # Название журнала
-            journal = ""
-            if "container-title" in item and len(item["container-title"]) > 0:
-                journal = item["container-title"][0]
-            
-            # Дата публикации (берем год)
-            year = ""
-            if "issued" in item and "date-parts" in item["issued"]:
-                date_parts = item["issued"]["date-parts"][0]
-                if len(date_parts) >= 1:
-                    year = str(date_parts[0])
-            
-            abstract = item.get("abstract", "No abstract available")
-            title = item.get("title", ["No Title"])[0] if isinstance(item.get("title"), list) else item.get("title", "No Title")
 
-            clean_article = {
-                "id": doi,
-                "title": title,
-                "authors": ", ".join(authors),
-                "abstract": abstract,
-                "journal": journal,
-                "year": year,
-                "link": link,
-                "source": "Crossref"
-            }
-            clean_articles.append(clean_article)
-            
-        print(f"=== DEBUG: Saved {len(clean_articles)} real articles. ===")
+BLACKLIST_WORDS = {"negro", "colonial", "vocabulary", "history", "culture", "art", "literature"}
+
+def is_not_blacklisted(title: str) -> bool:
+    t = title.lower()
+    return not any(word in t for word in BLACKLIST_WORDS)
+
+def is_relevant_by_content(title: str, abstract: str, subjects: list, search_terms: list) -> bool:
+    t = title.lower()
+    a = abstract.lower() if abstract else ""
+    s = " ".join([sub.lower() for sub in subjects])
+    
+    for term in search_terms:
+        term = term.lower()
+        if term in t or term in a or term in s:
+            return True
+    return False
+
+def fetch_articles():
+    print(f"=== Starting fetch for: '{SEARCH_QUERY}' ===")
+    
+    # ВАЖНО: query (а не query.title) — поиск по всем полям
+    params = {
+        "query": SEARCH_QUERY,
+        "filter": "type-name:journal-article,has-affiliation:true",
+        "rows": MAX_ITEMS,
+        "mailto": "your_email@example.com"
+    }
+
+    try:
+        response = requests.get(CROSSREF_URL, params=params)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
+        return []
+
+    items = data.get("message", {}).get("items", [])
+    search_terms = SEARCH_QUERY.split()
+    
+    print(f"=== Raw hits before filtering: {len(items)} ===")
+    
+    clean_articles = []
+    for item in items:
+        title = item.get("title", ["No title"])
+        abstract = item.get("abstract", "")
+        subjects = item.get("subject", [])
+        
+        # Фильтр 1: чёрный список (убираем гуманитарный мусор)
+        if not is_not_blacklisted(title):
+            print(f"⛔ Skipped (blacklist): {title}")
+            continue
+        
+        # Фильтр 2: проверка по содержанию (название/аннотация/ключевые слова)
+        if not is_relevant_by_content(title, abstract, subjects, search_terms):
+            print(f"⛔ Skipped (no match in content): {title}")
+            continue
+        
+        # Дальше обычная обработка
+        authors_list = item.get("author", [])
+        authors_names = [f"{a.get('given', '')} {a.get('family', '')}".strip()
+                         for a in authors_list if a.get('family')]
+        authors_str = ", ".join(authors_names)
+
+        doi = item.get("DOI", "")
+        issued = item.get("issued", {}).get("date-parts", [[None]])
+        year = issued if issued and isinstance(issued, int) else None
+
+        clean_articles.append({
+            "title": title,
+            "authors": authors_str,
+            "doi": doi,
+            "year": year,
+            "abstract": abstract,          # можно сохранить и в JSON, если нужно
+            "keywords": subjects           # и ключевые слова тоже
+        })
+
+    print(f"=== Final articles after filtering: {len(clean_articles)} ===")
 
         data_dir = "_data"
         if not os.path.exists(data_dir):
