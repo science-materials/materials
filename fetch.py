@@ -97,8 +97,6 @@ def fetch_articles():
             "keywords": subjects           # и ключевые слова тоже
         })
 
-    print(f"=== Final articles after filtering: {len(clean_articles)} ===")
-
         data_dir = "_data"
         if not os.path.exists(data_dir):
             os.makedirs(data_dir)
@@ -108,7 +106,8 @@ def fetch_articles():
         
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(clean_articles, f, ensure_ascii=False, indent=2)
-            
+        
+        print(f"=== Final articles after filtering: {len(clean_articles)} ===")
         return clean_articles
 
     except Exception as e:
