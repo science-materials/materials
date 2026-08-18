@@ -16,19 +16,19 @@
     "keywords": []
   },
   {
-    "title": "Emergence of Piezoelectric Materials in Smart Materials",
-    "authors": "Mohamed Aboughaly",
-    "doi": "10.1201/9781003516071-4",
+    "title": "Functional materials and structural materials for reactors",
+    "authors": "Rongzheng Liu, Xinyu Cheng",
+    "doi": "10.1016/b978-0-443-23810-9.00017-3",
     "year": 2025,
     "abstract": "",
     "keywords": []
   },
   {
-    "title": "Advanced Materials for Oral Application (Volume 2)",
-    "authors": "Laura-Cristina Rusu, Lavinia Cosmina Ardelean",
-    "doi": "10.3390/ma18051042",
+    "title": "Emergence of Piezoelectric Materials in Smart Materials",
+    "authors": "Mohamed Aboughaly",
+    "doi": "10.1201/9781003516071-4",
     "year": 2025,
-    "abstract": "<jats:p>This editorial aims to present the contributions published in the second volume of the Special Issue “Advanced Materials for Oral Application”, journal Materials [...]</jats:p>",
+    "abstract": "",
     "keywords": []
   },
   {
@@ -40,17 +40,33 @@
     "keywords": []
   },
   {
-    "title": "Functional materials and structural materials for reactors",
-    "authors": "Rongzheng Liu, Xinyu Cheng",
-    "doi": "10.1016/b978-0-443-23810-9.00017-3",
+    "title": "Advanced Materials for Oral Application (Volume 2)",
+    "authors": "Laura-Cristina Rusu, Lavinia Cosmina Ardelean",
+    "doi": "10.3390/ma18051042",
     "year": 2025,
-    "abstract": "",
+    "abstract": "<jats:p>This editorial aims to present the contributions published in the second volume of the Special Issue “Advanced Materials for Oral Application”, journal Materials [...]</jats:p>",
     "keywords": []
   },
   {
     "title": "Steel, Alloys, Green Chemistry, Bio-Based Materials and other Functional Materials",
     "authors": "Ade Wahyu Yusariarta, Ramesh K. Agarwal",
     "doi": "10.4028/b-g3q0ok",
+    "year": 2025,
+    "abstract": "",
+    "keywords": []
+  },
+  {
+    "title": "Emerging leaders in materials science: Capturing key advances in materials innovation",
+    "authors": "Yuanyuan Zhang, Bo Wang",
+    "doi": "10.1063/5.0296467",
+    "year": 2025,
+    "abstract": "<jats:p>Materials science continues to play a crucial role in addressing critical challenges in technology and society, driving advancements that span a wide range of industries. The development of new materials, combined with advanced characterization techniques and data-driven approaches, is fundamental to unlocking new possibilities in fields such as electronics, energy, and beyond. This collection highlights the inspiring work of emerging leaders in materials science, presenting their innovative research across a wide array of topics, spanning materials synthesis, characterization, and applications in fields such as optics, magnetics, electronics, energy, and biomaterials.</jats:p>",
+    "keywords": []
+  },
+  {
+    "title": "3 Electrorheological (fluids) smart materials",
+    "authors": "",
+    "doi": "10.1515/9783111379623-003",
     "year": 2025,
     "abstract": "",
     "keywords": []
@@ -64,27 +80,11 @@
     "keywords": []
   },
   {
-    "title": "3 Electrorheological (fluids) smart materials",
-    "authors": "",
-    "doi": "10.1515/9783111379623-003",
-    "year": 2025,
-    "abstract": "",
-    "keywords": []
-  },
-  {
     "title": "4 Piezoelectric smart materials",
     "authors": "",
     "doi": "10.1515/9783111379623-004",
     "year": 2025,
     "abstract": "",
-    "keywords": []
-  },
-  {
-    "title": "Emerging leaders in materials science: Capturing key advances in materials innovation",
-    "authors": "Yuanyuan Zhang, Bo Wang",
-    "doi": "10.1063/5.0296467",
-    "year": 2025,
-    "abstract": "<jats:p>Materials science continues to play a crucial role in addressing critical challenges in technology and society, driving advancements that span a wide range of industries. The development of new materials, combined with advanced characterization techniques and data-driven approaches, is fundamental to unlocking new possibilities in fields such as electronics, energy, and beyond. This collection highlights the inspiring work of emerging leaders in materials science, presenting their innovative research across a wide array of topics, spanning materials synthesis, characterization, and applications in fields such as optics, magnetics, electronics, energy, and biomaterials.</jats:p>",
     "keywords": []
   }
 ]
